@@ -18,6 +18,12 @@ namespace GameOfLifeXamarin
             Color = SKColors.Black
         };
 
+        SKPaint whiteFillPaint = new SKPaint
+        {
+            Style = SKPaintStyle.Fill,
+            Color = SKColors.White
+        };
+
         SKPaint whiteStrokePaint = new SKPaint
         {
             Style = SKPaintStyle.Stroke,
@@ -40,10 +46,12 @@ namespace GameOfLifeXamarin
             return true;
         }
 
+        private SKCanvas canvas;
+
         private void canvasView_PaintSurface(object sender, SKPaintSurfaceEventArgs e)
         {
             SKSurface surface = e.Surface;
-            SKCanvas canvas = surface.Canvas;
+            canvas = surface.Canvas;
 
             canvas.Clear(SKColors.CornflowerBlue);
 
@@ -56,9 +64,34 @@ namespace GameOfLifeXamarin
             // Scale size of canvas
             canvas.Scale(width / 210f);
 
+            DrawClock();
+
+            DrawArrows();
+        }
+
+        private void DrawClock()
+        {
             // Clock background
             canvas.DrawCircle(0, 0, 100, blackFillPaint);
 
+            canvas.Save();
+
+            // Dots
+            for (int i = 0; i < 12; i++)
+            {
+                if (i % 3 == 0)
+                    canvas.DrawCircle(0, 90, 4, whiteFillPaint);
+                else
+                    canvas.DrawCircle(0, 90, 2, whiteFillPaint);
+
+                canvas.RotateDegrees(30);
+            }
+
+            canvas.Restore();
+        }
+
+        private void DrawArrows()
+        {
             // Get date time
             DateTime dateTime = DateTime.Now;
 
